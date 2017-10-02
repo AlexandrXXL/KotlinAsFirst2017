@@ -17,7 +17,14 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean = TODO()
+fun isNumberHappy(number: Int): Boolean {
+    val n1 = number / 1000
+    val n2 = (number / 100) % 10
+    val n3 = (number / 10) % 10
+    val n4 = number % 10
+    if (n1 + n2 == n3 + n4) return true
+    return false
+}
 
 /**
  * Простая
@@ -26,7 +33,10 @@ fun isNumberHappy(number: Int): Boolean = TODO()
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
+    if ((x1 == x2) || (y1 == y2) || ((x1 - y1) == (x2 - y2)) || ((x1 + y1) == (x2 + y2))) return true
+    return false
+}
 
 /**
  * Средняя
@@ -36,7 +46,12 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
  * Вернуть true, если утверждение верно
  */
 fun circleInside(x1: Double, y1: Double, r1: Double,
-                 x2: Double, y2: Double, r2: Double): Boolean = TODO()
+                 x2: Double, y2: Double, r2: Double): Boolean {
+    val l = Math.sqrt(sqr(x1 - x2) + sqr(y1 - y2))
+    if (l > r2) return false
+    if ((l + r1) > r2) return false
+    return true
+}
 
 /**
  * Средняя
@@ -47,4 +62,19 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    fun LeaveShortest(a: Int,b: Int,c: Int):Pair <Int,Int> {
+        if (a >= b && a >= c) return Pair(c,b)
+        if (b >= a && b >= c) return Pair(a,c)
+        return Pair(a,b)
+    }
+    fun sort (a:Pair<Int,Int>):Pair<Int,Int>{
+        if(a.first>a.second) return Pair(a.second,a.first)
+        return a
+    }
+    val dim = LeaveShortest(a,b,c)
+    val dim_sorted = sort(dim)
+    val hole_sorted = sort(Pair(r,s))
+    return(dim_sorted.first <= hole_sorted.first)&&
+            (dim_sorted.second <= hole_sorted.second)
+}
