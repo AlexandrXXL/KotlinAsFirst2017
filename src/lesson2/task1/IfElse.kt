@@ -103,16 +103,15 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    fun triangleKind_2 (a:Double, b:Double,c: Double): Int {
+    fun helper (a:Double, b:Double,c: Double): Int {
         if (a >= (b + c)) return -1
         if (a * a < b * b + c * c) return 0
         if (a * a == b * b + c * c) return 1
         return 2
-
     }
-    if (a >= b && a >= c) return triangleKind_2(a, b, c)
-    if (b >= a && b >= c) return triangleKind_2(b, a, c)
-    return triangleKind_2(c, a, b)
+    if (a >= b && a >= c) return helper(a, b, c)
+    if (b >= a && b >= c) return helper(b, a, c)
+    return helper(c, a, b)
 }
 
 /**

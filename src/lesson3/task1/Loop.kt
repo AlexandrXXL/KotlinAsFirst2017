@@ -66,7 +66,8 @@ fun digitNumber(n: Int): Int {
     if (nvar == 0) return 1
     while (nvar / 10 != 0) {
         count = count + 1
-        nvar = nvar / 10 }
+        nvar = nvar / 10
+    }
     return count
 }
 
@@ -89,8 +90,7 @@ fun fib(n: Int): Int {
  */
 fun lcm(m: Int, n: Int): Int {
     var k = 1
-    while (k <= m * n )
-    {
+    while (k <= m * n ) {
         if ((k % m == 0) && (k % n == 0)) break
         k ++
     }
