@@ -64,13 +64,17 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     fun LeaveShortest(a: Int,b: Int,c: Int):Pair <Int,Int> {
-        if (a >= b && a >= c) return Pair(c,b)
-        if (b >= a && b >= c) return Pair(a,c)
-        return Pair(a,b)
+        return when {
+            a >= b && a >= c -> Pair(c,b)
+            b >= a && b >= c -> Pair(a,c)
+            else -> Pair(a,b)
+        }
     }
     fun sort (a:Pair<Int,Int>):Pair<Int,Int>{
-        if(a.first>a.second) return Pair(a.second,a.first)
-        return a
+        return when {
+            a.first>a.second -> Pair(a.second,a.first)
+            else -> a
+        }
     }
     val dim = LeaveShortest(a,b,c)
     val dim_sorted = sort(dim)
