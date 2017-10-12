@@ -103,13 +103,22 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = 1
-    while (k <= m * n ) {
-        if ((k % m == 0) && (k % n == 0)) break
-        k ++
+    var ans = 0
+    var maxDivisor = 0
+    var k = m
+    var z = n
+    while (maxDivisor == 0){
+        if ((Math.max(k, z) % Math.min(k, z)) == 0 )
+            maxDivisor = Math.min(k, z)
+        else {
+            if (k > z) k %= z
+            else z %= k
+        }
     }
-    return k
+    ans = m * n / maxDivisor
+    return ans
 }
+
 
 /**
  * Простая
@@ -118,11 +127,12 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var d = 2
-    while (d <= n) {
-        if (n % d == 0) break
-        d++
-    }
-    return d
+    val lim: Int = Math.sqrt(n.toDouble()).toInt()
+        while (d <= lim) {
+            if (n % d == 0) return d
+            d++
+        }
+    return n
 }
 
 /**
@@ -131,14 +141,12 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var d = 1
-    var del = 1
-    while (del < n) {
-        if (n % del == 0)
-            d = del
-        del++
+    var k = 0
+    for (i in n/2 downTo 1) {
+        if (n % i == 0)
+          return i
     }
-    return d
+    return 1
 }
 
 /**

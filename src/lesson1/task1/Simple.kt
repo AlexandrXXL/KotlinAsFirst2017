@@ -63,6 +63,7 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int =  hours * 3600 + minut
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
         (sagenes * 48.00 + arshins * 48.00 / 3.00 + vershoks) * 4.445 / 100.00
 
+
 /**
  * Тривиальная
  *
