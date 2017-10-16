@@ -315,7 +315,7 @@ fun russian(n: Int): String {
             mainTranslation(third) == "" -> hTranslaition(first) + tTranslaition(second, 0) + "тысяч "
 
             else -> hTranslaition(first) + tTranslaition(second, 0) +
-                    mainTranslation(third) + "тысяч "
+                    mainTranslation(third) + " тысяч "
             }
         }
         if ((helpT >= 11) && (helpT <= 19))
