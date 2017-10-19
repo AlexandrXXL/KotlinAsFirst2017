@@ -239,6 +239,7 @@ fun russian(n: Int): String {
     val first: Int = (th / 100) % 10
     val second: Int = (th / 10) % 10
     val third: Int = (th % 10)
+    var ans: String
     fun mainTranslation (x: Int): String {
         return when {
             x == 1 -> "один"
@@ -308,7 +309,7 @@ fun russian(n: Int): String {
                 third == 4 -> hTranslaition(first) +
                         tTranslaition(second, 0) + "четыре тысячи "
                 else -> ""
-                }
+            }
             (o == 0) && (t == 0) && (h == 0) -> hTranslaition(first) + tTranslaition(second, 0) +
                     mainTranslation(third) + "тысяч"
             first == 0 && second == 0 && third == 0 -> ""
@@ -316,11 +317,13 @@ fun russian(n: Int): String {
 
             else -> hTranslaition(first) + tTranslaition(second, 0) +
                     mainTranslation(third) + " тысяч "
-            }
         }
-        if ((helpT >= 11) && (helpT <= 19))
-            return thTranslation(th, helpTh) +
+    }
+    if ((helpT >= 11) && (helpT <= 19))
+        ans = thTranslation(th, helpTh) +
                 hTranslaition(h) + tTranslaition(t, helpT)
-    return thTranslation(th, helpTh) + hTranslaition(h) +
+    else
+        ans = thTranslation(th, helpTh) + hTranslaition(h) +
             tTranslaition(t, helpT) + mainTranslation(o)
+    return ans.trim()
 }

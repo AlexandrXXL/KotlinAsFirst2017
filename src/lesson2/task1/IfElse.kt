@@ -33,15 +33,14 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return when{
+fun ageDescription(age: Int): String = when{
         age % 100 >= 5 && age % 100 <= 20 -> "$age лет"
         age % 10 == 1 -> "$age год"
         age % 10 >= 2 && age % 10 <= 4 -> "$age года"
         else -> "$age лет"
     }
 
-}
+
 
 /**
  * Простая
@@ -97,9 +96,12 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int {
     return when {
-        ((kingX != rookX) && (kingY != rookY)) && (((kingX - kingY) != (bishopX - bishopY)) && ((kingX + kingY) != (bishopX + bishopY))) -> 0
-        ((kingX == rookX) || (kingY == rookY)) && (((kingX - kingY) != (bishopX - bishopY)) && ((kingX + kingY) != (bishopX + bishopY))) -> 1
-        ((kingX != rookX) && (kingY != rookY)) && (((kingX - kingY) == (bishopX - bishopY)) || ((kingX + kingY) == (bishopX+bishopY))) -> 2
+        ((kingX != rookX) && (kingY != rookY)) && (((kingX - kingY) !=
+                (bishopX - bishopY)) && ((kingX + kingY) != (bishopX + bishopY))) -> 0
+        ((kingX == rookX) || (kingY == rookY)) && (((kingX - kingY) !=
+                (bishopX - bishopY)) && ((kingX + kingY) != (bishopX + bishopY))) -> 1
+        ((kingX != rookX) && (kingY != rookY)) && (((kingX - kingY) ==
+                (bishopX - bishopY)) || ((kingX + kingY) == (bishopX+bishopY))) -> 2
         else -> 3
     }
 
@@ -137,12 +139,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return when {
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
         c >= a && c <= b && d >= b -> b - c
         c <= a && d >= b -> b - a
         c <= a && d <= b && d >= a -> d - a
         a <= c && c <= b && d >= a && d <= b -> d - c
         else -> -1
     }
-}
+

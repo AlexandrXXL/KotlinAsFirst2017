@@ -115,7 +115,7 @@ fun lcm(m: Int, n: Int): Int {
             else z %= k
         }
     }
-    ans = m * n / maxDivisor
+    ans = n / maxDivisor * m
     return ans
 }
 
@@ -127,7 +127,7 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var d = 2
-    val lim: Int = Math.sqrt(n.toDouble()).toInt()
+    val lim: Double = Math.ceil(Math.sqrt(n.toDouble()))
         while (d <= lim) {
             if (n % d == 0) return d
             d++
@@ -174,7 +174,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var k = 1
-    if ((n == 0) || (m == 0)) return false
+    if (m == 0)  return true
     else {
         while (n / k >= k) {
             if ((n.toDouble() / k.toDouble()  >= k.toDouble())
@@ -330,4 +330,4 @@ fun fibSequenceDigit(n: Int): Int {
         }
     }
     return ans
-    }
+}
