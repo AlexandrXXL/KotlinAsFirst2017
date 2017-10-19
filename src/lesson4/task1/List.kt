@@ -266,7 +266,7 @@ fun russian(n: Int): String {
     fun tTranslaition (x: Int, helpT: Int): String {
         return when {
             (helpT >= 11) && (helpT <= 19) -> mainTranslation(helpT)
-            x == 1 -> "десять"
+            x == 1 -> "десять "
             x == 2 -> "двадцать "
             x == 3 -> "тридцать "
             x == 4 -> "сорок "
