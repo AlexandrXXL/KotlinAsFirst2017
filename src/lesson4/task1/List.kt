@@ -216,7 +216,6 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  */
 fun convertToString(n: Int, base: Int): String {
     var m: Int = n
-    var remainder: Int = 0
     var l: Int = 0
     var backAns: String = ""
     var ans: String = ""
