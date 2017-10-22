@@ -325,24 +325,24 @@ fun russian(n: Int): String {
     var ans: String
     fun mainTranslation (x: Int): String {
         return when {
-            x == 1 -> "один"
-            x == 2 -> "два"
-            x == 3 -> "три"
-            x == 4 -> "четыре"
-            x == 5 -> "пять"
-            x == 6 -> "шесть"
-            x == 7 -> "семь"
-            x == 8 -> "восемь"
-            x == 9 -> "девять"
-            x == 11 -> "одиннадцать"
-            x == 12 -> "двенадцать"
-            x == 13 -> "тринадцать"
-            x == 14 -> "четырнадцать"
-            x == 15 -> "пятнадцать"
-            x == 16 -> "шестнадцать"
-            x == 17 -> "семнадцать"
-            x == 18 -> "восемнадцать"
-            x == 19 -> "девятнадцать"
+            x == 1 -> "один "
+            x == 2 -> "два "
+            x == 3 -> "три "
+            x == 4 -> "четыре "
+            x == 5 -> "пять "
+            x == 6 -> "шесть "
+            x == 7 -> "семь "
+            x == 8 -> "восемь "
+            x == 9 -> "девять "
+            x == 11 -> "одиннадцать "
+            x == 12 -> "двенадцать "
+            x == 13 -> "тринадцать "
+            x == 14 -> "четырнадцать "
+            x == 15 -> "пятнадцать "
+            x == 16 -> "шестнадцать "
+            x == 17 -> "семнадцать "
+            x == 18 -> "восемнадцать "
+            x == 19 -> "девятнадцать "
             else -> ""
         }
     }
@@ -377,14 +377,11 @@ fun russian(n: Int): String {
     }
     fun thTranslation (x: Int, helpTh: Int): String {
         return when {
-            ((o == 0) && (t == 0) && (h == 0)) && ((helpTh >= 11) && (helpTh <= 19)) -> hTranslaition(first) +
-                    mainTranslation(helpTh) + " тысяч"
             ((helpTh >= 11) && (helpTh <= 19)) -> hTranslaition(first) +
-                    mainTranslation(helpTh) + " тысяч "
+                    mainTranslation(helpTh) + "тысяч "
             (third >= 1) && (third <= 4) -> when {
-                ((first != 0) || (second != 0)) && third == 1 -> hTranslaition(first) +
+                third == 1 -> hTranslaition(first) +
                         tTranslaition(second, 0) + "одна тысяча "
-                ((first == 0) || (second == 0)) && third == 1 -> "тысяча"
                 third == 2 -> hTranslaition(first) +
                         tTranslaition(second, 0) + "две тысячи "
                 third == 3 -> hTranslaition(first) +
@@ -393,13 +390,10 @@ fun russian(n: Int): String {
                         tTranslaition(second, 0) + "четыре тысячи "
                 else -> ""
             }
-            (o == 0) && (t == 0) && (h == 0) -> hTranslaition(first) + tTranslaition(second, 0) +
-                    mainTranslation(third) + "тысяч"
             first == 0 && second == 0 && third == 0 -> ""
             mainTranslation(third) == "" -> hTranslaition(first) + tTranslaition(second, 0) + "тысяч "
-
             else -> hTranslaition(first) + tTranslaition(second, 0) +
-                    mainTranslation(third) + " тысяч "
+                    mainTranslation(third) + "тысяч "
         }
     }
     if ((helpT >= 11) && (helpT <= 19))
