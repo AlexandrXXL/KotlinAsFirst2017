@@ -171,7 +171,31 @@ fun factorize(n: Int): List<Int> = TODO()
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    var ans: String = ""
+    var remainder: Int = n
+    var test = 0
+    var root = (Math.sqrt(remainder.toDouble())).toInt()
+    for (i in 2..root) {
+        if ((remainder % i) == 0) {
+                while ((remainder % i) == 0) {
+                    if (test == 0){
+                        ans = "$i"
+                        test +=1
+                    }
+                    else
+                        ans += "*$i"
+                    remainder /= i
+                    root = (Math.sqrt(remainder.toDouble())).toInt()
+            }
+        }
+    }
+    return when {
+        (remainder != 1) && (ans == "") -> remainder.toString()
+        (remainder != 1) -> ans + "*" + remainder.toString()
+        else -> ans
+    }
+}
 
 /**
  * Средняя
@@ -190,7 +214,65 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    var m: Int = n
+    var remainder: Int = 0
+    var l: Int = 0
+    var backAns: String = ""
+    var ans: String = ""
+    var c: Int = 0
+    fun translaition (x: Int): String {
+        return when {
+            x == 0 -> "0"
+            x == 1 -> "1"
+            x == 2 -> "2"
+            x == 3 -> "3"
+            x == 4 -> "4"
+            x == 5 -> "5"
+            x == 6 -> "6"
+            x == 7 -> "7"
+            x == 8 -> "8"
+            x == 9 -> "9"
+            x == 10 -> "a"
+            x == 11 -> "b"
+            x == 12 -> "c"
+            x == 13 -> "d"
+            x == 14 -> "e"
+            x == 15 -> "f"
+            x == 16 -> "g"
+            x == 17 -> "h"
+            x == 18 -> "i"
+            x == 19 -> "j"
+            x == 20 -> "k"
+            x == 21 -> "l"
+            x == 22 -> "m"
+            x == 23 -> "n"
+            x == 24 -> "o"
+            x == 25 -> "p"
+            x == 26 -> "q"
+            x == 27 -> "r"
+            x == 28 -> "s"
+            x == 29 -> "t"
+            x == 30 -> "u"
+            x == 31 -> "v"
+            x == 32 -> "w"
+            x == 33 -> "x"
+            x == 34 -> "y"
+           else -> "z"
+        }
+    }
+    while (m != 0) {
+        l = m % base
+        backAns += translaition(l)
+        m /= base
+        c++
+    }
+    for (char in backAns) {
+        ans += backAns [c-1]
+        c --
+    }
+    return ans
+}
 
 /**
  * Средняя
