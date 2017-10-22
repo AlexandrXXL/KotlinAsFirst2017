@@ -220,6 +220,8 @@ fun convertToString(n: Int, base: Int): String {
     var backAns: String = ""
     var ans: String = ""
     var c: Int = 0
+    if (n == 0)
+        ans = "0"
     fun translaition (x: Int): String {
         return when {
             x == 0 -> "0"
