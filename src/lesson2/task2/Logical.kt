@@ -46,7 +46,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
 fun circleInside(x1: Double, y1: Double, r1: Double,
                  x2: Double, y2: Double, r2: Double): Boolean {
     val l = Math.sqrt(sqr(x1 - x2) + sqr(y1 - y2))
-     return ((l + r1) <= r2)
+    return ((l + r1) <= r2)
 }
 
 /**
@@ -59,7 +59,7 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    fun LeaveShortest(a: Int,b: Int,c: Int):Pair <Int,Int> {
+    fun leaveShortest(a: Int,b: Int,c: Int):Pair <Int,Int> {
         return when {
             a >= b && a >= c -> Pair(c,b)
             b >= a && b >= c -> Pair(a,c)
@@ -72,7 +72,7 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
             else -> a
         }
     }
-    val dim = LeaveShortest(a,b,c)
+    val dim = leaveShortest(a,b,c)
     val dimSorted = sort(dim)
     val holeSorted = sort(Pair(r,s))
     return(dimSorted.first <= holeSorted.first)&&

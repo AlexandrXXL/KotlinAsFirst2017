@@ -107,7 +107,7 @@ fun lcm(m: Int, n: Int): Int {
     var maxDivisor = 0
     var k = m
     var z = n
-    while (maxDivisor == 0){
+    while (maxDivisor == 0) {
         if ((Math.max(k, z) % Math.min(k, z)) == 0 )
             maxDivisor = Math.min(k, z)
         else {
@@ -128,10 +128,10 @@ fun lcm(m: Int, n: Int): Int {
 fun minDivisor(n: Int): Int {
     var d = 2
     val lim: Double = Math.ceil(Math.sqrt(n.toDouble()))
-        while (d <= lim) {
-            if (n % d == 0) return d
-            d++
-        }
+    while (d <= lim) {
+        if (n % d == 0) return d
+        d++
+    }
     return n
 }
 
@@ -157,12 +157,18 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var d = 2
-    while (d <= m){
-        if ((m % d == 0) && (n % d == 0)) return false
-        d++
+    var maxDivisor = 0
+    var k = m
+    var z = n
+    while (maxDivisor == 0) {
+        if ((Math.max(k, z) % Math.min(k, z)) == 0 )
+            maxDivisor = Math.min(k, z)
+        else {
+            if (k > z) k %= z
+            else z %= k
+        }
     }
-    return true
+    return maxDivisor == 1
 }
 
 /**
@@ -230,7 +236,22 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Поменять порядок цифр заданного числа n на обратный: 13478 -> 87431.
  * Не использовать строки при решении задачи.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var m = n
+    var c = 0
+    var ans = 0
+    while (m > 0) {
+        c ++
+        m /= 10
+    }
+    m = n
+    for (i in 1..c ) {
+        ans += (m % 10) * Math.pow(10.0,(c-1.0)).toInt()
+        m /= 10
+        c --
+    }
+    return ans
+}
 
 /**
  * Средняя
@@ -259,34 +280,28 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
 fun squareSequenceDigit(n: Int): Int {
     var count: Int = 0
     var z: Int = 0
-    var countlocal: Int = 0
     var num = 1
     var k: Int = 0
     var ans: Int = 0
-    if (n == 1) return 1
-    else {
-        do {
-            z = num * num
-            k = z
-            while (k > 0) {
-                k /= 10
-                countlocal++
-            }
-            count += countlocal
-            num++
-            countlocal = 0
-        } while (n > count)
-
-        if (n == count) ans = z % 10
-        else {
-            var y = count - n
-            while (y > 0) {
-                z /= 10
-                y--
-            }
-            ans = z % 10
+    do {
+        var countlocal: Int = 0
+        z = num * num
+        k = z
+        while (k > 0) {
+            k /= 10
+            countlocal++
         }
+        count += countlocal
+        num++
+        countlocal = 0
+        }
+    while (n > count)
+    var y = count - n
+    while (y > 0) {
+        z /= 10
+        y--
     }
+    ans = z % 10
     return ans
 }
 
@@ -318,14 +333,13 @@ fun fibSequenceDigit(n: Int): Int {
             x1 = x2
             x2 = z
             countlocal = 0
-        } while (n > count)
+        }
+        while (n > count)
         if (n == count) ans = z % 10
-        else {
             var y: Int = count - n
             while (y > 0) {
              z /= 10
              y--
-         }
             ans = z % 10
         }
     }

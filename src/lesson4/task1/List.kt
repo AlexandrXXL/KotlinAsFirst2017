@@ -123,7 +123,13 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val m: Double = list.sum() / list.size
+    for (i in 0 .. (list.size-1)) {
+        list [i] -= m
+    }
+    return list
+}
 
 /**
  * Средняя
@@ -222,8 +228,8 @@ fun convertToString(n: Int, base: Int): String {
     var c: Int = 0
     if (n == 0)
         ans = "0"
-    fun translaition (x: Int): String {
-        return when {
+    fun translaition (x: Int): String =
+            when {
             x == 0 -> "0"
             x == 1 -> "1"
             x == 2 -> "2"
@@ -261,12 +267,11 @@ fun convertToString(n: Int, base: Int): String {
             x == 34 -> "y"
            else -> "z"
         }
-    }
     while (m != 0) {
         l = m % base
         backAns += translaition(l)
         m /= base
-        c++
+        c ++
     }
     for (char in backAns) {
         ans += backAns [c-1]
@@ -282,7 +287,19 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var ans = 0
+    var c: Double = digits.size.toDouble()
+    if (digits.size == 1)
+        return digits[0]
+    else {
+        for (i in 0..(digits.size - 1)) {
+            ans += digits[i] * Math.pow(base.toDouble(),c - 1.0).toInt()
+            c --
+        }
+    }
+    return ans
+}
 
 /**
  * Сложная
@@ -293,7 +310,57 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var c: Double = 0.0
+    var ans: Int = 0
+    fun translation (x: String): Int =
+            when {
+                x == "0" -> 0
+                x == "1" -> 1
+                x == "2" -> 2
+                x == "3" -> 3
+                x == "4" -> 4
+                x == "5" -> 5
+                x == "6" -> 6
+                x == "7" -> 7
+                x == "8" -> 8
+                x == "9" -> 9
+                x == "a" -> 10
+                x == "b" -> 11
+                x == "c" -> 12
+                x == "d" -> 13
+                x == "e" -> 14
+                x == "f" -> 15
+                x == "g" -> 16
+                x == "h" -> 17
+                x == "i" -> 18
+                x == "j" -> 19
+                x == "k" -> 20
+                x == "l" -> 21
+                x == "m" -> 22
+                x == "n" -> 23
+                x == "o" -> 24
+                x == "p" -> 25
+                x == "q" -> 26
+                x == "r" -> 27
+                x == "s" -> 28
+                x == "t" -> 29
+                x == "u" -> 30
+                x == "v" -> 31
+                x == "w" -> 32
+                x == "x" -> 33
+                x == "y" -> 34
+                else -> 35
+            }
+    for (char in str) {
+        c ++
+    }
+    for (char in str) {
+        ans += translation(char.toString()) * (Math.pow(base.toDouble(),(c - 1))).toInt()
+        c --
+    }
+    return ans
+}
 
 /**
  * Сложная
