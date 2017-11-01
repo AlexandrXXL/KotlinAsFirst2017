@@ -185,9 +185,9 @@ fun factorizeToString(n: Int): String {
     for (i in 2..root) {
         if ((remainder % i) == 0) {
                 while ((remainder % i) == 0) {
-                    if (test == 0){
+                    if (test == 0) {
                         ans = "$i"
-                        test +=1
+                        test += 1
                     }
                     else
                         ans += "*$i"

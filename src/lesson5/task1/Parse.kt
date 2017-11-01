@@ -66,28 +66,29 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateStrToDigit(str: String): String { //не проверять
+fun dateStrToDigit(str: String): String {
     val parts = str.split(' ')
+    if (parts.size != 3)
+        return ""
     fun translaitor (x: String): String =
             when {
-            x == "января" -> "01"
-            x == "февраля" -> "02"
-            x == "марта" -> "03"
-            x == "апреля" -> "04"
-            x == "мая" -> "05"
-            x == "июня" -> "06"
-            x == "июля" -> "07"
-            x == "августа" -> "08"
-            x == "сентября" -> "09"
-            x == "октября" -> "10"
-            x == "ноября" -> "11"
-            x == "декабря" -> "12"
-            else -> ""
-    }
-    if (((parts[0].toInt() < 0) || (parts[0].toInt() >= 31)) || (translaitor(parts[1]) == "") ||
-            ((parts[2].toInt() < 0) && (parts[2].toInt() >= 12)))
+                x == "января" -> "01"
+                x == "февраля" -> "02"
+                x == "марта" -> "03"
+                x == "апреля" -> "04"
+                x == "мая" -> "05"
+                x == "июня" -> "06"
+                x == "июля" -> "07"
+                x == "августа" -> "08"
+                x == "сентября" -> "09"
+                x == "октября" -> "10"
+                x == "ноября" -> "11"
+                x == "декабря" -> "12"
+                else -> ""
+            }
+    if (translaitor(parts[1]) == "")
         return ""
-    return String.format("%02d.%02d.%02d", parts [0], translaitor(parts[1]), parts [2])
+    return String.format("%02d.%s.%s", parts[0].toInt(), translaitor(parts[1]), parts[2])
 }
 
 /**
@@ -97,7 +98,30 @@ fun dateStrToDigit(str: String): String { //не проверять
  * Перевести её в строковый формат вида "15 июля 2016".
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String  {
+    val parts = digital.split(".")
+    if (parts.size != 3)
+        return ""
+    fun translaitor (x: String): String =
+            when {
+                x == "01" -> "января"
+                x == "02" -> "февраля"
+                x == "03" -> "марта"
+                x == "04" -> "апреля"
+                x == "05" -> "мая"
+                x == "06" -> "июня"
+                x == "07" -> "июля"
+                x == "08" -> "августа"
+                x == "09" -> "сентября"
+                x == "10" -> "октября"
+                x == "11" -> "ноября"
+                x == "12" -> "декабря"
+                else -> ""
+            }
+    if (translaitor(parts[1]) == "")
+        return ""
+    return String.format("%d %s %s", parts[0].toInt(), translaitor(parts[1]), parts[2])
+}
 
 /**
  * Средняя
@@ -158,7 +182,6 @@ fun plusMinus(expression: String): Int = TODO()
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int = TODO()
-
 /**
  * Сложная
  *
