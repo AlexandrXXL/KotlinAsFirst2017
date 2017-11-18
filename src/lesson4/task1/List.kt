@@ -209,6 +209,8 @@ fun factorizeToString(n: Int): String = factorizeSolution(n).joinToString(separa
 fun convert(n: Int, base: Int): List<Int> {
     var ans = mutableListOf<Int>()
     var k = n
+    if (n == 0)
+        ans.add(n)
     while (k > 0) {
         ans.add(k % base)
         k /= base
@@ -358,8 +360,9 @@ fun russian(n: Int): String {
                 ans.add("тысяч")
             }
         }
-        if ((th3 != 0) && (helpTh == 0))
+        if ((th3 != 0) && ((helpTh == 0) || (th2 != 0 && th3 == 0)))
             ans.add("тысяч")
+
     }
     ans.add(hTranslate(h))
     if (helpT in 11..19)
