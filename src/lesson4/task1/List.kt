@@ -360,7 +360,9 @@ fun russian(n: Int): String {
                 ans.add("тысяч")
             }
         }
-        if ((th3 != 0) && ((helpTh == 0) || (th2 != 0 && th3 == 0)))
+        if ((th3 != 0) && (helpTh == 0))
+            ans.add("тысяч")
+        if ((th3 == 0) && (th2 != 0) && (th1 == 0))
             ans.add("тысяч")
 
     }
