@@ -169,39 +169,35 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
-
+fun factorize(n: Int): List<Int> = factorizeSolution(n).sorted()
+fun factorizeSolution (x: Int): List<Int> {
+    var k: Int = x
+    val root: Int = Math.sqrt(k.toDouble()).toInt()
+    var ans = mutableListOf<Int>()
+    for (i in 2..root) {
+        if ((k % i) == 0)
+            while ((k % i) == 0) {
+                ans.add(i)
+                k /= i
+            }
+        if (k == 1)
+            break
+    }
+    if (ans.size == 0) {
+        ans.add(x)
+        return ans
+    }
+    if (k != 1)
+        ans.add(k)
+    return ans
+}
 /**
  * Сложная
  *
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String {
-    var ans: String = ""
-    var remainder: Int = n
-    var test = 0
-    var root = (Math.sqrt(remainder.toDouble())).toInt()
-    for (i in 2..root) {
-        if ((remainder % i) == 0) {
-                while ((remainder % i) == 0) {
-                    if (test == 0) {
-                        ans = "$i"
-                        test += 1
-                    }
-                    else
-                        ans += "*$i"
-                    remainder /= i
-                    root = (Math.sqrt(remainder.toDouble())).toInt()
-            }
-        }
-    }
-    return when {
-        (remainder != 1) && (ans == "") -> remainder.toString()
-        (remainder != 1) -> ans + "*" + remainder.toString()
-        else -> ans
-    }
-}
+fun factorizeToString(n: Int): String = factorizeSolution(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -210,7 +206,15 @@ fun factorizeToString(n: Int): String {
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var ans = mutableListOf<Int>()
+    var k = n
+    while (k > 0) {
+        ans.add(k % base)
+        k /= base
+    }
+    return ans.reversed()
+}
 
 /**
  * Сложная
@@ -221,65 +225,14 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    var m: Int = n
-    var l: Int = 0
-    var backAns: String = ""
-    var ans: String = ""
-    var c: Int = 0
-    if (n == 0)
-        ans = "0"
-    fun translaition (x: Int): String =
-            when {
-            x == 0 -> "0"
-            x == 1 -> "1"
-            x == 2 -> "2"
-            x == 3 -> "3"
-            x == 4 -> "4"
-            x == 5 -> "5"
-            x == 6 -> "6"
-            x == 7 -> "7"
-            x == 8 -> "8"
-            x == 9 -> "9"
-            x == 10 -> "a"
-            x == 11 -> "b"
-            x == 12 -> "c"
-            x == 13 -> "d"
-            x == 14 -> "e"
-            x == 15 -> "f"
-            x == 16 -> "g"
-            x == 17 -> "h"
-            x == 18 -> "i"
-            x == 19 -> "j"
-            x == 20 -> "k"
-            x == 21 -> "l"
-            x == 22 -> "m"
-            x == 23 -> "n"
-            x == 24 -> "o"
-            x == 25 -> "p"
-            x == 26 -> "q"
-            x == 27 -> "r"
-            x == 28 -> "s"
-            x == 29 -> "t"
-            x == 30 -> "u"
-            x == 31 -> "v"
-            x == 32 -> "w"
-            x == 33 -> "x"
-            x == 34 -> "y"
-           else -> "z"
+        var ans = convert(n, base)
+        var builder = StringBuilder()
+        for (element in 0 .. ans.lastIndex) {
+            if (ans[element] > 9) builder.append('a' + ans[element] - 10)
+            else builder.append(ans[element])
         }
-    while (m != 0) {
-        l = m % base
-        backAns += translaition(l)
-        m /= base
-        c ++
+        return builder.toString()
     }
-    for (char in backAns) {
-        ans += backAns [c-1]
-        c --
-    }
-    return ans
-}
-
 /**
  * Средняя
  *
@@ -290,13 +243,9 @@ fun convertToString(n: Int, base: Int): String {
 fun decimal(digits: List<Int>, base: Int): Int {
     var ans = 0
     var c: Double = digits.size.toDouble()
-    if (digits.size == 1)
-        return digits[0]
-    else {
-        for (i in 0..(digits.size - 1)) {
-            ans += digits[i] * Math.pow(base.toDouble(),c - 1.0).toInt()
-            c --
-        }
+    for (i in 0..(digits.size - 1)) {
+        ans += digits[i] * Math.pow(base.toDouble(),c - 1.0).toInt()
+        c --
     }
     return ans
 }
@@ -311,55 +260,14 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Например: str = "13c", base = 14 -> 250
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var c: Double = 0.0
-    var ans: Int = 0
-    fun translation (x: String): Int =
-            when {
-                x == "0" -> 0
-                x == "1" -> 1
-                x == "2" -> 2
-                x == "3" -> 3
-                x == "4" -> 4
-                x == "5" -> 5
-                x == "6" -> 6
-                x == "7" -> 7
-                x == "8" -> 8
-                x == "9" -> 9
-                x == "a" -> 10
-                x == "b" -> 11
-                x == "c" -> 12
-                x == "d" -> 13
-                x == "e" -> 14
-                x == "f" -> 15
-                x == "g" -> 16
-                x == "h" -> 17
-                x == "i" -> 18
-                x == "j" -> 19
-                x == "k" -> 20
-                x == "l" -> 21
-                x == "m" -> 22
-                x == "n" -> 23
-                x == "o" -> 24
-                x == "p" -> 25
-                x == "q" -> 26
-                x == "r" -> 27
-                x == "s" -> 28
-                x == "t" -> 29
-                x == "u" -> 30
-                x == "v" -> 31
-                x == "w" -> 32
-                x == "x" -> 33
-                x == "y" -> 34
-                else -> 35
-            }
-    for (char in str) {
-        c ++
+    var a = mutableListOf<Int>()
+    for (i in 0 .. (str.length - 1)) {
+        if (str[i] >= 'a') {
+            a.add(str[i] - 'a' + 10)
+        }
+        else a.add(str[i] - '0')
     }
-    for (char in str) {
-        ans += translation(char.toString()) * (Math.pow(base.toDouble(),(c - 1))).toInt()
-        c --
-    }
-    return ans
+    return decimal(a, base)
 }
 
 /**
@@ -380,94 +288,88 @@ fun roman(n: Int): String = TODO()
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val o: Int = n % 10
-    val t: Int = (n / 10) % 10
-    val h: Int = (n / 100) % 10
-    val th: Int = (n / 1000) % 1000
+    val o = n % 10
+    val t = (n / 10) % 10
+    val h = (n / 100) % 10
+    val th1 = (n / 1000) % 10
+    val th2 = (n / 10000) % 10
+    val th3 = (n / 100000) % 10
     val helpT: Int = n % 100
     val helpTh: Int = (n / 1000) % 100
-    val first: Int = (th / 100) % 10
-    val second: Int = (th / 10) % 10
-    val third: Int = (th % 10)
-    var ans: String
-    fun mainTranslation (x: Int): String {
-        return when {
-            x == 1 -> "один "
-            x == 2 -> "два "
-            x == 3 -> "три "
-            x == 4 -> "четыре "
-            x == 5 -> "пять "
-            x == 6 -> "шесть "
-            x == 7 -> "семь "
-            x == 8 -> "восемь "
-            x == 9 -> "девять "
-            x == 11 -> "одиннадцать "
-            x == 12 -> "двенадцать "
-            x == 13 -> "тринадцать "
-            x == 14 -> "четырнадцать "
-            x == 15 -> "пятнадцать "
-            x == 16 -> "шестнадцать "
-            x == 17 -> "семнадцать "
-            x == 18 -> "восемнадцать "
-            x == 19 -> "девятнадцать "
-            else -> ""
-        }
+    var ans = mutableListOf<String>()
+    fun mainTranslate (x: Int): String = when (x) {
+        1 -> "один"
+        2 -> "два"
+        3 -> "три"
+        4 -> "четыре"
+        5 -> "пять"
+        6 -> "шесть"
+        7 -> "семь"
+        8 -> "восемь"
+        9 -> "девять"
+        11 -> "одиннадцать"
+        12 -> "двенадцать"
+        13 -> "тринадцать"
+        14 -> "четырнадцать"
+        15 -> "пятнадцать"
+        16 -> "шестнадцать"
+        17 -> "семнадцать"
+        18 -> "восемнадцать"
+        19 -> "девятнадцать"
+        else -> ""
     }
-    fun tTranslaition (x: Int, helpT: Int): String {
-        return when {
-            (helpT >= 11) && (helpT <= 19) -> mainTranslation(helpT)
-            x == 1 -> "десять "
-            x == 2 -> "двадцать "
-            x == 3 -> "тридцать "
-            x == 4 -> "сорок "
-            x == 5 -> "пятьдесят "
-            x == 6 -> "шестьдесят "
-            x == 7 -> "семьдесят "
-            x == 8 -> "восемьдесят "
-            x == 9 -> "девяносто "
-            else -> ""
-        }
+    fun tTranslate (x: Int): String = when (x) {
+        1 -> "десять"
+        2 -> "двадцать"
+        3 -> "тридцать"
+        4 -> "сорок"
+        5 -> "пятьдесят"
+        6 -> "шестьдесят"
+        7 -> "семьдесят"
+        8 -> "восемьдесят"
+        9 -> "девяносто"
+        else -> ""
     }
-    fun hTranslaition (x: Int): String {
-        return when {
-            x == 1 -> "сто "
-            x == 2 -> "двести "
-            x == 3 -> "триста "
-            x == 4 -> "четыреста "
-            x == 5 -> "пятьсот "
-            x == 6 -> "шестьсот "
-            x == 7 -> "семьсот "
-            x == 8 -> "восемьсот "
-            x == 9 -> "девятьсот "
-            else -> ""
-        }
+    fun hTranslate (x: Int): String = when (x) {
+        1 -> "сто"
+        2 -> "двести"
+        3 -> "триста"
+        4 -> "четыреста"
+        5 -> "пятьсот"
+        6 -> "шестьсот"
+        7 -> "семьсот"
+        8 -> "восемьсот"
+        9 -> "девятьсот"
+        else -> ""
     }
-    fun thTranslation (x: Int, helpTh: Int): String {
-        return when {
-            ((helpTh >= 11) && (helpTh <= 19)) -> hTranslaition(first) +
-                    mainTranslation(helpTh) + "тысяч "
-            (third >= 1) && (third <= 4) -> when {
-                third == 1 -> hTranslaition(first) +
-                        tTranslaition(second, 0) + "одна тысяча "
-                third == 2 -> hTranslaition(first) +
-                        tTranslaition(second, 0) + "две тысячи "
-                third == 3 -> hTranslaition(first) +
-                        tTranslaition(second, 0) + "три тысячи "
-                third == 4 -> hTranslaition(first) +
-                        tTranslaition(second, 0) + "четыре тысячи "
-                else -> ""
+    ans.add(hTranslate(th3))
+    if (helpTh in 11..19)
+        ans.add("${mainTranslate(helpTh)} тысяч")
+    else {
+        ans.add(tTranslate(th2))
+        when (th1) {
+            0 -> ans.add("")
+            1 -> ans.add("одна тысяча")
+            2 -> ans.add("две тысячи")
+            3 -> ans.add("три тысячи")
+            4 -> ans.add("четыре тысячи")
+            else -> {
+                ans.add(mainTranslate(th1))
+                ans.add("тысяч")
             }
-            first == 0 && second == 0 && third == 0 -> ""
-            mainTranslation(third) == "" -> hTranslaition(first) + tTranslaition(second, 0) + "тысяч "
-            else -> hTranslaition(first) + tTranslaition(second, 0) +
-                    mainTranslation(third) + "тысяч "
         }
+        if ((th3 != 0) && (helpTh == 0))
+            ans.add("тысяч")
     }
-    if ((helpT >= 11) && (helpT <= 19))
-        ans = thTranslation(th, helpTh) +
-                hTranslaition(h) + tTranslaition(t, helpT)
-    else
-        ans = thTranslation(th, helpTh) + hTranslaition(h) +
-            tTranslaition(t, helpT) + mainTranslation(o)
-    return ans.trim()
+    ans.add(hTranslate(h))
+    if (helpT in 11..19)
+        ans.add("${mainTranslate(helpT)}")
+    else {
+        ans.add(tTranslate(t))
+        ans.add(mainTranslate(o))
+    }
+    while ("" in ans){
+        ans.remove("")
+    }
+    return (ans.joinToString (separator = " "))
 }

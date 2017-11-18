@@ -59,22 +59,10 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    fun leaveShortest(a: Int,b: Int,c: Int):Pair <Int,Int> {
-        return when {
-            a >= b && a >= c -> Pair(c,b)
-            b >= a && b >= c -> Pair(a,c)
-            else -> Pair(a,b)
-        }
-    }
-    fun sort (a:Pair<Int,Int>):Pair<Int,Int>{
-        return when {
-            a.first>a.second -> Pair(a.second,a.first)
-            else -> a
-        }
-    }
-    val dim = leaveShortest(a,b,c)
-    val dimSorted = sort(dim)
-    val holeSorted = sort(Pair(r,s))
-    return(dimSorted.first <= holeSorted.first)&&
-            (dimSorted.second <= holeSorted.second)
+    val x = maxOf(a,b,c)
+    val z = minOf(a,b,c)
+    val y = (a + b + c) - (x + z)
+    val j = maxOf(r,s)
+    val k = minOf(r,s)
+    return ((y <= j) && (z <= k ))
 }

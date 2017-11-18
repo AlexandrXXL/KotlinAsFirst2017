@@ -102,22 +102,7 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var ans = 0
-    var maxDivisor = 0
-    var k = m
-    var z = n
-    while (maxDivisor == 0) {
-        if ((Math.max(k, z) % Math.min(k, z)) == 0 )
-            maxDivisor = Math.min(k, z)
-        else {
-            if (k > z) k %= z
-            else z %= k
-        }
-    }
-    ans = n / maxDivisor * m
-    return ans
-}
+fun lcm(m: Int, n: Int): Int = n / eql(m, n) * m
 
 
 /**
@@ -141,12 +126,16 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var k = 0
-    for (i in n/2 downTo 1) {
-        if (n % i == 0)
-          return i
+    var ans: Int = 0
+    for (i in 2..Math.sqrt(n.toDouble()).toInt()) {
+        if (n % i == 0) {
+            ans = n / i
+            break
+        }
     }
-    return 1
+    if (ans == 0)
+        return 1
+    return ans
 }
 
 /**
@@ -156,10 +145,13 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
+fun isCoPrime(m: Int, n: Int): Boolean = eql(m,n) == 1
+
+
+fun eql (a: Int,b: Int): Int {
+    var k = a
+    var z = b
     var maxDivisor = 0
-    var k = m
-    var z = n
     while (maxDivisor == 0) {
         if ((Math.max(k, z) % Math.min(k, z)) == 0 )
             maxDivisor = Math.min(k, z)
@@ -168,7 +160,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
             else z %= k
         }
     }
-    return maxDivisor == 1
+    return maxDivisor
 }
 
 /**
@@ -199,11 +191,14 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    fun sin2(x: Double, n: Int): Double {
+    var y = x
+    if ((y % Math.PI) == 0.0)
+        y %= 2 * Math.PI
+    fun sin2(y: Double, n: Int): Double {
         var mul: Double = 1.0
-        val x = x % (2 * Math.PI)
+        val y = y % (2 * Math.PI)
         for (i: Int in 1..n) {
-            mul = mul * x
+            mul = mul * y
             mul = mul / i
         }
         return mul
@@ -213,11 +208,11 @@ fun sin(x: Double, eps: Double): Double {
     var p: Double
     var n: Int = 1
     do {
-        p = sin2(x, n)
+        p = sin2(y, n)
         sum = sum + sign * p
         n = n + 2
         sign = -sign
-    } while (p >= eps)
+    } while (Math.abs(p) >= eps)
     return sum
 }
 
@@ -260,7 +255,7 @@ fun revert(n: Int): Int {
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -281,26 +276,15 @@ fun squareSequenceDigit(n: Int): Int {
     var count: Int = 0
     var z: Int = 0
     var num = 1
-    var k: Int = 0
     var ans: Int = 0
     do {
-        var countlocal: Int = 0
         z = num * num
-        k = z
-        while (k > 0) {
-            k /= 10
-            countlocal++
-        }
-        count += countlocal
+        count += digitNumber(z)
         num++
-        countlocal = 0
-        }
-    while (n > count)
+    } while (n > count)
     var y = count - n
-    while (y > 0) {
-        z /= 10
-        y--
-    }
+    if (y != 0)
+        z /= (Math.pow (10.0, y.toDouble())).toInt()
     ans = z % 10
     return ans
 }
@@ -314,34 +298,21 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var count: Int = 2
-    var z: Int = 0
-    var countlocal: Int = 0
+    var z: Int
     var x1: Int = 1
     var x2: Int = 1
-    var k: Int = 0
-    var ans: Int = 0
-    if ((n == 1) || (n == 2)) return 1
-    else {
-        do {
-            z = x1 + x2
-            k = z
-            while (k > 0) {
-                k /= 10
-                countlocal++
-            }
-            count += countlocal
-            x1 = x2
-            x2 = z
-            countlocal = 0
-        }
-        while (n > count)
-        if (n == count) ans = z % 10
-            var y: Int = count - n
-            while (y > 0) {
-             z /= 10
-             y--
-            ans = z % 10
-        }
-    }
+    var ans: Int
+    if ((n == 1) || (n == 2))
+        return 1
+    do {
+        z = x1 + x2
+        count += digitNumber(z)
+        x1 = x2
+        x2 = z
+    } while (n > count)
+    var y = count - n
+    if (y != 0)
+        z /= (Math.pow (10.0, y.toDouble())).toInt()
+    ans = z % 10
     return ans
 }
