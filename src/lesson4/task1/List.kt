@@ -125,7 +125,7 @@ fun mean(list: List<Double>): Double = TODO()
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val m: Double = list.sum() / list.size
-    for (i in 0 .. (list.size-1)) {
+    for (i in 0 until list.size) {
         list [i] -= m
     }
     return list
@@ -169,11 +169,11 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = factorizeSolution(n).sorted()
+fun factorize(n: Int): List<Int> = factorizeSolution(n)
 fun factorizeSolution (x: Int): List<Int> {
     var k: Int = x
     val root: Int = Math.sqrt(k.toDouble()).toInt()
-    var ans = mutableListOf<Int>()
+    val ans = mutableListOf<Int>()
     for (i in 2..root) {
         if ((k % i) == 0)
             while ((k % i) == 0) {
@@ -207,7 +207,7 @@ fun factorizeToString(n: Int): String = factorizeSolution(n).joinToString(separa
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var ans = mutableListOf<Int>()
+    val ans: MutableList<Int> = mutableListOf<Int>()
     var k = n
     if (n == 0)
         ans.add(n)
@@ -227,8 +227,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-        var ans = convert(n, base)
-        var builder = StringBuilder()
+        val ans = convert(n, base)
+        val builder = StringBuilder()
         for (element in 0 .. ans.lastIndex) {
             if (ans[element] > 9) builder.append('a' + ans[element] - 10)
             else builder.append(ans[element])
@@ -262,7 +262,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Например: str = "13c", base = 14 -> 250
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var a = mutableListOf<Int>()
+    val a = mutableListOf<Int>()
     for (i in 0 .. (str.length - 1)) {
         if (str[i] >= 'a') {
             a.add(str[i] - 'a' + 10)
@@ -370,8 +370,6 @@ fun russian(n: Int): String {
         ans.add(tTranslate(t))
         ans.add(mainTranslate(o))
     }
-    while ("" in ans){
-        ans.remove("")
-    }
+    ans.removeAll (listOf(""))
     return (ans.joinToString (separator = " "))
 }

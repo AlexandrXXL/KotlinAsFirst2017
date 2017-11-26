@@ -69,10 +69,9 @@ fun main(args: Array<String>) {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateStrToDigit(str: String): String {
-    try {
         val parts = str.split(' ')
         if (parts.size != 3)
-            throw (Exception ("Wrong string"))
+            return ""
         fun translate(x: String): String =
                 when (x) {
                     "января" -> "01"
@@ -89,8 +88,11 @@ fun dateStrToDigit(str: String): String {
                     "декабря" -> "12"
                     else -> throw Exception ("Wrong month name")
                 }
-        return String.format("%02d.%s.%d", parts[0].toInt(), translate(parts[1]), parts[2].toInt())
-    } catch (e: Exception){return ""}
+    return try {
+        String.format("%02d.%s.%d", parts[0].toInt(), translate(parts[1]), parts[2].toInt())
+    } catch (e: Exception) {
+        ""
+    }
 }
 
 /**
@@ -100,29 +102,33 @@ fun dateStrToDigit(str: String): String {
  * Перевести её в строковый формат вида "15 июля 2016".
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateDigitToStr(digital: String): String  {
-    try {
-        val parts = digital.split(".")
-        if (parts.size != 3)
-            throw Exception("wrong string format")
-        fun translate(x: String): String =
-                when (x) {
-                    "01" -> "января"
-                    "02" -> "февраля"
-                    "03" -> "марта"
-                    "04" -> "апреля"
-                    "05" -> "мая"
-                    "06" -> "июня"
-                    "07" -> "июля"
-                    "08" -> "августа"
-                    "09" -> "сентября"
-                    "10" -> "октября"
-                    "11" -> "ноября"
-                    "12" -> "декабря"
-                    else -> throw Exception("wrong month format")
-                }
-        return String.format("%d %s %s", parts[0].toInt(), translate(parts[1]), parts[2])
-    } catch (e: Exception) {return ""}
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".")
+    if (parts.size != 3)
+        return ""
+    fun translate(x: String): String =
+            when (x) {
+                "01" -> "января"
+                "02" -> "февраля"
+                "03" -> "марта"
+                "04" -> "апреля"
+                "05" -> "мая"
+                "06" -> "июня"
+                "07" -> "июля"
+                "08" -> "августа"
+                "09" -> "сентября"
+                "10" -> "октября"
+                "11" -> "ноября"
+                "12" -> "декабря"
+                else -> throw Exception("wrong month format")
+            }
+    return try {
+        String.format("%d %s %s", parts[0].toInt(), translate(parts[1]), parts[2])
+    } catch (e: NumberFormatException) {
+        ""
+    } catch (e: Exception) {
+        ""
+    }
 }
 
 /**
@@ -138,19 +144,32 @@ fun dateDigitToStr(digital: String): String  {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
+    var flagPlus = false
+    var flagBrackets = false
     var ans = ""
+    var spaceFlag = 0
+    var dashFlag = 0
+    var bracketsCount = 0
     for (i in 0 until phone.length) {
-        if (phone[i] != '(' && phone[i] != ')' && phone[i] != '-' && phone[i] != ' ')
-            ans += phone[i]
-    }
-    try {
-        for (i in 0 until ans.length) {
-            if (ans[i] != '+' && ans[i] != '1' && ans[i] != '2' && ans[i] != '3' && ans[i] != '4'
-                    && ans[i] != '5' && ans[i] != '6' && ans[i] != '7' && ans[i] != '8' && ans[i] != '9')
-                throw Exception("wrong string format")
+        when {
+            phone[i] == '+' && !flagPlus -> {
+                ans += phone[i]
+                flagPlus = true
+            }
+            phone[i] in listOf('1','2','3','4','5','6','7','8','9','0') ->
+                ans += phone[i]
+            phone[i] == ' ' -> spaceFlag += 1
+            phone[i] == '-' -> dashFlag += 1
+            phone[i] == '(' && !flagBrackets -> {
+                if (')' in phone)
+                    flagBrackets = true
+                else return ""
+            }
+            phone[i] == ')' && flagBrackets && bracketsCount == 0 -> bracketsCount += 1
+            else -> return ""
         }
-        return ans
-    } catch (e: Exception) {return ""}
+    }
+    return ans
 }
 /**
  * Средняя
@@ -164,18 +183,16 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     val parts = jumps.split(' ')
-    var partsClean = mutableListOf<String>()
-    var partsInt = mutableListOf<Int>()
+    val partsClean = parts.filter { it !in listOf("-","%","")}
+    val partsInt = mutableListOf<Int>()
     var ans: Int = -1
-    for (i in 0..parts.lastIndex) {
-        if (parts[i] != "-" && parts[i] != "%")
-            partsClean.add(parts[i])
-    }
     try {
         for (i in 0..partsClean.lastIndex) {
             partsInt.add(partsClean[i].toInt())
         }
-    } catch (e: NumberFormatException) {return -1}
+    } catch (e: NumberFormatException) {
+        return -1
+    }
     for (i in 0..partsInt.lastIndex) {
         if (partsInt[i] >= ans)
             ans = partsInt[i]
@@ -205,27 +222,32 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
+    val parts = expression.split(' ')
+    var ans: Int
+    if (parts.size % 2 != 1)
+        throw  IllegalArgumentException("wrong string")
     try {
-        val parts = expression.split(' ')
-        var ans: Int
-        if (parts.size % 2 != 1)
-            throw  IllegalArgumentException("wrong string")
-        if (parts[0] != "+" && parts[0] != "-")
-            ans = parts[0].toInt()
-        else throw IllegalArgumentException ("first element is wrong")
-        if (parts.size == 1)
-            return ans
-        for (i in 1 until parts.size step 2) {
-            if ((parts[i] == "+" || parts[i] == "-") && parts[i + 1] != "+" && parts[i + 1] != "-")
+        ans = parts[0].toInt()
+    } catch (a:NumberFormatException) {
+        throw IllegalArgumentException("first element is wrong")
+    }
+    if (parts.size == 1)
+        return ans
+    for (i in 1 until parts.size step 2) {
+        if ((parts[i] == "+" || parts[i] == "-") &&
+                parts[i + 1] != "+" && parts[i + 1] != "-")
+            try {
                 when (parts[i]) {
                     "+" -> ans += parts[i + 1].toInt()
                     "-" -> ans -= parts[i + 1].toInt()
                     else -> throw  IllegalArgumentException ("unknown element")
                 }
-            else throw IllegalArgumentException ("wrong string format")
-        }
-        return ans
-    } catch (e: IllegalArgumentException) {throw IllegalArgumentException("wrong string format")}
+            } catch (e: NumberFormatException) {
+                throw IllegalArgumentException ("wrong string format")
+            }
+        else throw IllegalArgumentException ("wrong string format")
+    }
+    return ans
 }
 /**
  * Сложная
@@ -249,23 +271,26 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть положительными
  */
 fun mostExpensive(description: String): String {
-    try {
-        var goods = mutableListOf<String>()
-        var prices = mutableListOf<Double>()
-        var priceMax: Double = 0.0
-        var index: Int = -1
-        fun helpExpensive(x: String) {
-            val parts = x.split(' ')
-            if (parts.size != 2)
-                throw Exception("wrong string format")
-               try {
-                   goods.add(parts[0])
-                   prices.add(parts[1].toDouble())
-               } catch (e: NumberFormatException) {throw e}
+    val goods = mutableListOf<String>()
+    val prices = mutableListOf<Double>()
+    var priceMax = 0.0
+    var index: Int = -1
+    class myException(m: String): Exception(m)
+    fun helpMostExpensive(x: String) {
+        val parts = x.split(' ')
+        if (parts.size != 2)
+            throw myException("wrong string format")
+        try {
+            goods.add(parts[0])
+            prices.add(parts[1].toDouble())
+        } catch (e: NumberFormatException) {
+            throw myException("wrong string format")
         }
+    }
+    return try {
         val partsMain = description.split("; ")
         for (i in 0..partsMain.lastIndex) {
-            helpExpensive(partsMain[i])
+            helpMostExpensive(partsMain[i])
         }
         for (i in 0..prices.lastIndex) {
             if (prices[i] >= priceMax) {
@@ -273,8 +298,10 @@ fun mostExpensive(description: String): String {
                 index = i
             }
         }
-        return goods[index]
-    } catch (a: Exception) {return ""}
+        goods[index]
+    } catch (e: myException) {
+        ""
+    }
 }
 
 /**

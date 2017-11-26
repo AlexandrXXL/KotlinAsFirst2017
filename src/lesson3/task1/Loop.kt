@@ -65,8 +65,8 @@ fun digitNumber(n: Int): Int {
     var nvar = n
     if (nvar == 0) return 1
     while (nvar / 10 != 0) {
-        count = count + 1
-        nvar = nvar / 10
+        count += 1
+        nvar /= 10
     }
     return count
 }
@@ -78,19 +78,19 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var x1: Int = 1
-    var x2: Int = 1
-    var k: Int = 2
-    var local: Int = 0
-    if (n <= k) return 1
+    var x1 = 1
+    var x2 = 1
+    var k = 2
+    var local = 0
+    return if (n <= k) 1
     else {
         while (k < n) {
             local = x1 + x2
             x1 = x2
             x2 = local
-            k++
+            k ++
         }
-        return local
+        local
     }
 }
 
@@ -102,7 +102,7 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = n / eql(m, n) * m
+fun lcm(m: Int, n: Int): Int = n / euclid(m, n) * m
 
 
 /**
@@ -115,7 +115,7 @@ fun minDivisor(n: Int): Int {
     val lim: Double = Math.ceil(Math.sqrt(n.toDouble()))
     while (d <= lim) {
         if (n % d == 0) return d
-        d++
+        d ++
     }
     return n
 }
@@ -125,18 +125,8 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var ans: Int = 0
-    for (i in 2..Math.sqrt(n.toDouble()).toInt()) {
-        if (n % i == 0) {
-            ans = n / i
-            break
-        }
-    }
-    if (ans == 0)
-        return 1
-    return ans
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
+
 
 /**
  * Простая
@@ -145,10 +135,10 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = eql(m,n) == 1
+fun isCoPrime(m: Int, n: Int): Boolean = euclid(m,n) == 1
 
 
-fun eql (a: Int,b: Int): Int {
+fun euclid(a: Int, b: Int): Int {
     var k = a
     var z = b
     var maxDivisor = 0
@@ -177,7 +167,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
         while (n / k >= k) {
             if ((n.toDouble() / k.toDouble()  >= k.toDouble())
                     && (m.toDouble() / k.toDouble() <= k.toDouble())) return true
-            k++
+            k ++
         }
         return false
     }
@@ -191,26 +181,23 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var y = x
-    if ((y % Math.PI) == 0.0)
-        y %= 2 * Math.PI
+    val y = x % (2 * Math.PI)
     fun sin2(y: Double, n: Int): Double {
-        var mul: Double = 1.0
-        val y = y % (2 * Math.PI)
+        var mul = 1.0
         for (i: Int in 1..n) {
-            mul = mul * y
-            mul = mul / i
+            mul *= y
+            mul /= i
         }
         return mul
     }
-    var sign: Double = 1.0
-    var sum: Double = 0.0
+    var sign = 1.0
+    var sum = 0.0
     var p: Double
-    var n: Int = 1
+    var n = 1
     do {
         p = sin2(y, n)
-        sum = sum + sign * p
-        n = n + 2
+        sum += sign * p
+        n += 2
         sign = -sign
     } while (Math.abs(p) >= eps)
     return sum
@@ -273,16 +260,16 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var count: Int = 0
-    var z: Int = 0
+    var count = 0
+    var z = 0
     var num = 1
-    var ans: Int = 0
+    var ans = 0
     do {
         z = num * num
         count += digitNumber(z)
-        num++
+        num ++
     } while (n > count)
-    var y = count - n
+    val y = count - n
     if (y != 0)
         z /= (Math.pow (10.0, y.toDouble())).toInt()
     ans = z % 10
@@ -297,11 +284,11 @@ fun squareSequenceDigit(n: Int): Int {
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var count: Int = 2
+    var count = 2
     var z: Int
-    var x1: Int = 1
-    var x2: Int = 1
-    var ans: Int
+    var x1 = 1
+    var x2 = 1
+    val ans: Int
     if ((n == 1) || (n == 2))
         return 1
     do {
@@ -310,7 +297,7 @@ fun fibSequenceDigit(n: Int): Int {
         x1 = x2
         x2 = z
     } while (n > count)
-    var y = count - n
+    val y = count - n
     if (y != 0)
         z /= (Math.pow (10.0, y.toDouble())).toInt()
     ans = z % 10
