@@ -169,9 +169,8 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = factorizeSolution(n)
-fun factorizeSolution (x: Int): List<Int> {
-    var k: Int = x
+fun factorize(n: Int): List<Int> {
+    var k: Int = n
     val root: Int = Math.sqrt(k.toDouble()).toInt()
     val ans = mutableListOf<Int>()
     for (i in 2..root) {
@@ -184,7 +183,7 @@ fun factorizeSolution (x: Int): List<Int> {
             break
     }
     if (ans.size == 0) {
-        ans.add(x)
+        ans.add(n)
         return ans
     }
     if (k != 1)
@@ -197,7 +196,7 @@ fun factorizeSolution (x: Int): List<Int> {
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = factorizeSolution(n).joinToString(separator = "*")
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя

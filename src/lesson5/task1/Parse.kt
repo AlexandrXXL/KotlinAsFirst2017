@@ -1,8 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson5.task1
 
-import java.io.File.separator
-
 /**
  * Пример
  *
@@ -69,28 +67,28 @@ fun main(args: Array<String>) {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateStrToDigit(str: String): String {
-        val parts = str.split(' ')
-        if (parts.size != 3)
-            return ""
-        fun translate(x: String): String =
-                when (x) {
-                    "января" -> "01"
-                    "февраля" -> "02"
-                    "марта" -> "03"
-                    "апреля" -> "04"
-                    "мая" -> "05"
-                    "июня" -> "06"
-                    "июля" -> "07"
-                    "августа" -> "08"
-                    "сентября" -> "09"
-                    "октября" -> "10"
-                    "ноября" -> "11"
-                    "декабря" -> "12"
-                    else -> throw Exception ("Wrong month name")
-                }
+    val parts = str.split(' ')
+    if (parts.size != 3)
+        return ""
+    fun translate(x: String): String =
+            when (x) {
+                "января" -> "01"
+                "февраля" -> "02"
+                "марта" -> "03"
+                "апреля" -> "04"
+                "мая" -> "05"
+                "июня" -> "06"
+                "июля" -> "07"
+                "августа" -> "08"
+                "сентября" -> "09"
+                "октября" -> "10"
+                "ноября" -> "11"
+                "декабря" -> "12"
+                else -> throw IllegalArgumentException ("Wrong month name")
+            }
     return try {
         String.format("%02d.%s.%d", parts[0].toInt(), translate(parts[1]), parts[2].toInt())
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         ""
     }
 }
@@ -120,13 +118,13 @@ fun dateDigitToStr(digital: String): String {
                 "10" -> "октября"
                 "11" -> "ноября"
                 "12" -> "декабря"
-                else -> throw Exception("wrong month format")
+                else -> throw IllegalArgumentException("wrong month format")
             }
     return try {
         String.format("%d %s %s", parts[0].toInt(), translate(parts[1]), parts[2])
     } catch (e: NumberFormatException) {
         ""
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         ""
     }
 }
@@ -144,23 +142,21 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    var flagPlus = false
     var flagBrackets = false
-    var ans = ""
+    val ans = mutableListOf<String>()
     var spaceFlag = 0
     var dashFlag = 0
     var bracketsCount = 0
     for (i in 0 until phone.length) {
         when {
-            phone[i] == '+' && !flagPlus -> {
-                ans += phone[i]
-                flagPlus = true
+            phone[i] == '+' && i == 0 -> {
+                ans.add(phone[i].toString())
             }
-            phone[i] in listOf('1','2','3','4','5','6','7','8','9','0') ->
-                ans += phone[i]
+            phone[i] in listOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0') ->
+                ans.add(phone[i].toString())
             phone[i] == ' ' -> spaceFlag += 1
             phone[i] == '-' -> dashFlag += 1
-            phone[i] == '(' && !flagBrackets -> {
+            phone[i] == '(' && !flagBrackets && phone[i + 1] != ')' -> {
                 if (')' in phone)
                     flagBrackets = true
                 else return ""
@@ -169,7 +165,7 @@ fun flattenPhoneNumber(phone: String): String {
             else -> return ""
         }
     }
-    return ans
+    return ans.joinToString(separator = "")
 }
 /**
  * Средняя
@@ -234,16 +230,14 @@ fun plusMinus(expression: String): Int {
     if (parts.size == 1)
         return ans
     for (i in 1 until parts.size step 2) {
-        if ((parts[i] == "+" || parts[i] == "-") &&
-                parts[i + 1] != "+" && parts[i + 1] != "-")
+        if (parts[i] == "+" || parts[i] == "-")
             try {
                 when (parts[i]) {
                     "+" -> ans += parts[i + 1].toInt()
-                    "-" -> ans -= parts[i + 1].toInt()
-                    else -> throw  IllegalArgumentException ("unknown element")
+                    else -> ans -= parts[i + 1].toInt()
                 }
             } catch (e: NumberFormatException) {
-                throw IllegalArgumentException ("wrong string format")
+                throw IllegalArgumentException("wrong string format")
             }
         else throw IllegalArgumentException ("wrong string format")
     }
@@ -275,16 +269,16 @@ fun mostExpensive(description: String): String {
     val prices = mutableListOf<Double>()
     var priceMax = 0.0
     var index: Int = -1
-    class myException(m: String): Exception(m)
+    class MostExpensiveException(m: String): Exception(m)
     fun helpMostExpensive(x: String) {
         val parts = x.split(' ')
         if (parts.size != 2)
-            throw myException("wrong string format")
+            throw MostExpensiveException("wrong string format")
         try {
             goods.add(parts[0])
             prices.add(parts[1].toDouble())
         } catch (e: NumberFormatException) {
-            throw myException("wrong string format")
+            throw MostExpensiveException("wrong string format")
         }
     }
     return try {
@@ -299,7 +293,7 @@ fun mostExpensive(description: String): String {
             }
         }
         goods[index]
-    } catch (e: myException) {
+    } catch (e: MostExpensiveException) {
         ""
     }
 }
